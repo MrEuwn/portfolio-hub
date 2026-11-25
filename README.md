@@ -1,6 +1,14 @@
 # PRAFASTA · Monograph (Five-World Awwwards Portfolio Hub)
 
-**Repository:** [github.com/MrEuwn/portfolio-hub](https://github.com/MrEuwn/portfolio-hub)
+**Live Demo:** [https://prafasta-monograph.vercel.app](https://prafasta-monograph.vercel.app) · **Repository:** [github.com/MrEuwn/portfolio-hub](https://github.com/MrEuwn/portfolio-hub)
+
+| Architectural Gallery Hero | Curatorial Index & CV-Reticle |
+| :---: | :---: |
+| ![PRAFASTA Monograph Hero](./docs/preview-hero.png) | ![Curatorial Index](./docs/preview-index.png) |
+
+| Darkroom Craft DNA Mixer | Scoped Case Study World |
+| :---: | :---: |
+| ![Craft DNA Mixer](./docs/preview-mixer.png) | ![Scoped Case World](./docs/preview-case.png) |
 
 Curatorial multi-style UI/UX and Design Engineering portfolio hub synthesizing five live Awwwards-grade showcases into a cohesive two-layer architecture: an **Archival Gallery Host Shell** paired with **5 Isolated Scoped Token Worlds (`data-project-theme`)** and **5 live working interactive micro-artifacts**.
 
