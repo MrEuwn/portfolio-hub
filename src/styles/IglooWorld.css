@@ -1,0 +1,752 @@
+/* ============================================================
+   IGLOO.INC 1:1 SPATIAL WEBGL OBSERVATORY & INFINITE LOOP HUD
+   Overcast Silver-Slate Mist (#A4ABB7), White Radiance, Pixel Scramble
+   ============================================================ */
+
+.igloo-viewport-shell {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #a4abb7;
+  user-select: none;
+  touch-action: none;
+}
+
+.observatory-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.igloo-hud-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.igloo-dot-matrix {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px);
+  background-size: 46px 46px;
+  transition: opacity 420ms ease;
+}
+
+/* Beat 0: Isometric 3D CAD Vertex Numbers */
+.igloo-cad-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.igloo-cad-node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  will-change: transform;
+}
+
+.igloo-cad-node b {
+  font-weight: 400;
+  font-size: 11px;
+}
+
+/* Beat 1: 1px White Hover Tracking Triangle */
+.igloo-hover-tri-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Depth-of-Field Blurred Background Telemetry Watermarks (f06 & f10) */
+.igloo-dof-watermarks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 6vw;
+}
+
+.igloo-dof-watermark {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2.4vw, 32px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.42);
+  filter: blur(2.6px);
+}
+
+.igloo-dof-watermark--right {
+  text-align: right;
+  margin-top: 140px;
+}
+
+/* TOP-LEFT: Outlined Wordmark + Scramble Bars */
+.igloo-top-left {
+  position: absolute;
+  top: 26px;
+  left: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.igloo-wordmark-btn {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.igloo-wordmark-svg {
+  filter: drop-shadow(0 2px 10px rgba(32, 38, 48, 0.25));
+}
+
+.igloo-scramble-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.igloo-bar {
+  display: inline-block;
+  padding: 3px 9px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.igloo-bar--dark {
+  background: rgba(34, 39, 48, 0.78);
+  color: #f4f8ff;
+}
+
+.igloo-bar--light {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1c2129;
+}
+
+/* TOP-RIGHT: Minimal Glitch-Tag Controls */
+.igloo-top-right {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.igloo-hud-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(34, 39, 48, 0.68);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.igloo-hud-chip:hover,
+.igloo-hud-chip--active {
+  background: #ffffff;
+  color: #181c24;
+}
+
+.igloo-hud-chip--light {
+  background: rgba(255, 255, 255, 0.9);
+  color: #181c24;
+}
+
+.igloo-hud-chip--light:hover {
+  background: #181c24;
+  color: #ffffff;
+}
+
+/* Index Quick-Jump Drawer */
+.igloo-index-drawer {
+  position: absolute;
+  top: 72px;
+  right: 28px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 14px;
+  background: rgba(22, 26, 34, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.igloo-index-drawer__head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.igloo-index-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.igloo-index-row__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 4px 0;
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: left;
+}
+
+.igloo-index-row__jump:hover {
+  color: #bfe6ff;
+}
+
+.igloo-index-row__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.igloo-index-row__links {
+  display: flex;
+  gap: 4px;
+}
+
+.igloo-mini-btn {
+  min-height: 26px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.igloo-mini-btn:hover,
+.igloo-mini-btn.is-active {
+  background: #ffffff;
+  color: #181c24;
+}
+
+/* BEAT 3: Pedestal Left/Right Reticle Arrows + Center Title + Glowing Plaque (f09 & f10) */
+.igloo-chamber-arrows {
+  position: absolute;
+  left: 8vw;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.igloo-reticle-arrow {
+  pointer-events: auto;
+  width: 64px;
+  height: 44px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.82);
+  background: transparent;
+  color: #ffffff;
+  font-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms var(--ease-tactile), border-color 200ms ease;
+}
+
+.igloo-reticle-arrow:hover {
+  transform: scale(1.12);
+  border-color: #ffffff;
+}
+
+.igloo-chamber-caption {
+  position: absolute;
+  left: 50%;
+  top: -310px;
+  transform: translateX(-50%);
+  text-align: center;
+  width: min(560px, 84vw);
+  text-shadow: 0 2px 18px rgba(34, 40, 52, 0.45);
+}
+
+.igloo-chamber-caption__code {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(34, 39, 48, 0.68);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.igloo-chamber-caption__title {
+  margin: 8px 0 4px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 0.95;
+  color: #ffffff;
+}
+
+.igloo-chamber-caption__sub {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Bottom-Center Glowing Corner-Bracketed Plaque (exact f09 & f10!) */
+.igloo-pedestal-plaque-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.igloo-glow-plaque {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid #ffffff;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1a1f28;
+  box-shadow:
+    0 0 24px rgba(230, 246, 255, 0.85),
+    inset 0 0 12px rgba(255, 255, 255, 0.95);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: transform 200ms var(--ease-tactile), box-shadow 200ms ease;
+}
+
+.igloo-glow-plaque:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 34px rgba(255, 255, 255, 1);
+}
+
+.plaque-corner {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: #1a1f28;
+  border-style: solid;
+  border-width: 0;
+}
+
+.plaque-corner--tl {
+  top: 3px;
+  left: 3px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.plaque-corner--tr {
+  top: 3px;
+  right: 3px;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.plaque-corner--bl {
+  bottom: 3px;
+  left: 3px;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.plaque-corner--br {
+  bottom: 3px;
+  right: 3px;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.igloo-mini-plaque {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(34, 39, 48, 0.62);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.igloo-mini-plaque:hover {
+  background: #ffffff;
+  color: #1a1f28;
+}
+
+/* BEAT 4: Vortex Footer HUD */
+.igloo-vortex-hud {
+  position: absolute;
+  left: 50%;
+  bottom: 42px;
+  transform: translateX(-50%);
+  width: min(860px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  pointer-events: auto;
+}
+
+.igloo-vortex-hud__kicker {
+  margin: 0;
+  padding: 4px 10px;
+  background: rgba(26, 31, 40, 0.74);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+}
+
+.igloo-vortex-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.igloo-vortex-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #1a1f28;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  transition: transform 180ms ease;
+}
+
+.igloo-vortex-pill:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+
+.igloo-vortex-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* BOTTOM-LEFT & BOTTOM-RIGHT TELEMETRY */
+.igloo-bottom-left {
+  position: absolute;
+  left: 28px;
+  bottom: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.igloo-pixel-glyph {
+  padding: 3px 5px;
+  background: rgba(26, 31, 40, 0.78);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.igloo-bottom-tag {
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1a1f28;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.igloo-bottom-right {
+  position: absolute;
+  right: 28px;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.igloo-checkpoint-pip {
+  min-width: 30px;
+  min-height: 28px;
+  padding: 0 6px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(26, 31, 40, 0.62);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.igloo-checkpoint-pip.is-active,
+.igloo-checkpoint-pip:hover {
+  background: #ffffff;
+  color: #1a1f28;
+  border-color: #ffffff;
+}
+
+/* ============================================================
+   CHAMBER DOSSIER INSPECTION MODAL
+   ============================================================ */
+.chamber-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  background: rgba(18, 22, 30, 0.72);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.chamber-modal {
+  width: min(1080px, 100%);
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: clamp(20px, 3vw, 32px);
+  background: rgba(18, 21, 28, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #f4f7fb;
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.55);
+}
+
+.chamber-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 22px;
+}
+
+.chamber-modal__title {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 0.96;
+}
+
+.chamber-modal__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.chamber-modal__left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chamber-modal__plate {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #090b10;
+}
+
+.chamber-modal__plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chamber-modal__plate-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chamber-modal__caption {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #b9c4d4;
+}
+
+.chamber-modal__summary {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #dce3ee;
+}
+
+.chamber-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+@media (max-width: 900px) {
+  .chamber-modal__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .igloo-dof-watermarks {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .igloo-top-left {
+    top: 14px;
+    left: 14px;
+    gap: 10px;
+  }
+
+  .igloo-wordmark-svg {
+    width: 108px;
+    height: 22px;
+  }
+
+  .igloo-sfx-label {
+    display: none;
+  }
+
+  .igloo-bar {
+    font-size: 9px;
+    padding: 2px 6px;
+    max-width: calc(100vw - 28px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .igloo-top-right {
+    top: 12px;
+    right: 14px;
+    gap: 4px;
+  }
+
+  .igloo-hud-chip {
+    min-height: 28px;
+    padding: 0 7px;
+    font-size: 9px;
+  }
+
+  .igloo-chamber-arrows {
+    left: 14px;
+    right: 14px;
+  }
+
+  .igloo-reticle-arrow {
+    width: 42px;
+  }
+
+  .igloo-chamber-caption {
+    top: -245px;
+  }
+
+  .igloo-pedestal-plaque-bar {
+    bottom: 62px;
+    gap: 6px;
+  }
+
+  .igloo-glow-plaque {
+    padding: 0 14px;
+    font-size: 10px;
+    min-height: 38px;
+  }
+
+  .igloo-bottom-left {
+    left: 14px;
+    bottom: 14px;
+  }
+
+  .igloo-bottom-right {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .igloo-checkpoint-pip {
+    min-width: 24px;
+    min-height: 24px;
+    font-size: 9px;
+    padding: 0 4px;
+  }
+}
