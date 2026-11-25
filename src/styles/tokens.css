@@ -1,0 +1,124 @@
+/* ============================================================
+   PRAFASTA · MONOGRAPH : CURATORIAL HOST SHELL & 5 SCOPED WORLDS
+   Zero banned buzzword fonts; strict WCAG AA/AAA verified tokens.
+   ============================================================ */
+
+:root {
+  /* Layer A: Curatorial Archival Gallery Host Shell */
+  --surface-ground: #f8f7f4;
+  --surface-elevated: #efede7;
+  --surface-card: #ffffff;
+  --surface-darkroom: #0a0b0e;
+  --surface-dark-card: #12141a;
+  --ink-primary: #0d0d0d;
+  --ink-muted: #52524e;
+  --ink-on-dark: #f4f3ee;
+  --ink-muted-on-dark: #a6a9b2;
+  --hairline: rgba(13, 13, 13, 0.11);
+  --hairline-strong: rgba(13, 13, 13, 0.24);
+  --hairline-dark: rgba(244, 243, 238, 0.14);
+  --accent-signal: #d9381e;
+
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-pill: 999px;
+  --radius-card: 18px;
+  --radius-frame: 10px;
+  --container-max: 1380px;
+  --gutter: clamp(18px, 3vw, 44px);
+
+  /* Authored Awwwards Motion Curves */
+  --ease-editorial: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-tactile: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur-med: 420ms;
+  --dur-slow: 780ms;
+}
+
+/* ============================================================
+   LAYER B: 5 ISOLATED PER-PROJECT SCOPED TOKEN WORLDS
+   ============================================================ */
+
+/* 01 · Rumah Wiraloka (Warm Soga Linen Atelier) */
+[data-project-theme='wiraloka-batik'] {
+  --case-ground: #efe7d9;
+  --case-surface: #e4d7c3;
+  --case-card: #f7f2e8;
+  --case-ink: #2a1e17;
+  --case-muted: #5d4b40;
+  --case-accent: #9a481e;
+  --case-accent-ink: #ffffff;
+  --case-hairline: rgba(42, 30, 23, 0.16);
+  --case-display: 'EB Garamond', Georgia, serif;
+  --case-body: 'Noto Sans', sans-serif;
+  --case-mono: 'IBM Plex Mono', monospace;
+  --case-radius: 2px;
+}
+
+/* 02 · KOMA O-III (Monolithic Darkroom Cinema Optics) */
+[data-project-theme='koma-optics'] {
+  --case-ground: #0d1014;
+  --case-surface: #151a21;
+  --case-card: #1b212a;
+  --case-ink: #eff2f5;
+  --case-muted: #9ca5b0;
+  --case-accent: #e27a36;
+  --case-accent-ink: #0d1014;
+  --case-hairline: rgba(239, 242, 245, 0.14);
+  --case-display: 'Schibsted Grotesk', sans-serif;
+  --case-body: 'IBM Plex Sans', sans-serif;
+  --case-mono: 'IBM Plex Mono', monospace;
+  --case-radius: 4px;
+}
+
+/* 03 · SILIKA (Obsidian-Cobalt Spatial Silicon Archive) */
+[data-project-theme='silika-vault'] {
+  --case-ground: #06090f;
+  --case-surface: #0e1420;
+  --case-card: #131c2c;
+  --case-ink: #e8eef7;
+  --case-muted: #93a4bd;
+  --case-accent: #38bdf8;
+  --case-accent-ink: #06090f;
+  --case-hairline: rgba(232, 238, 247, 0.14);
+  --case-display: 'Archivo', sans-serif;
+  --case-body: 'IBM Plex Sans', sans-serif;
+  --case-mono: 'JetBrains Mono', monospace;
+  --case-radius: 4px;
+}
+
+/* 04 · REDAM (Warm Parchment & Espresso Editorial) */
+[data-project-theme='redam-acoustics'] {
+  --case-ground: #ede8e6;
+  --case-surface: #e3dcd8;
+  --case-card: #ffffff;
+  --case-ink: #47220e;
+  --case-muted: #694632;
+  --case-accent: #3b1a14;
+  --case-accent-ink: #ffa125;
+  --case-hairline: rgba(71, 34, 14, 0.14);
+  --case-display: 'Montserrat', sans-serif;
+  --case-editorial-serif: 'Instrument Serif', Georgia, serif;
+  --case-body: 'IBM Plex Sans', sans-serif;
+  --case-mono: 'IBM Plex Mono', monospace;
+  --case-radius: 18px;
+}
+
+/* 05 · SOROT (Signal Vermilion & Carbon Obsidian Stage) */
+[data-project-theme='sorot-scenics'] {
+  --case-ground: #111214;
+  --case-surface: #191b20;
+  --case-card: #1f2229;
+  --case-ink: #ffffff;
+  --case-muted: #b5b9c2;
+  --case-accent: #ff573b;
+  --case-accent-ink: #111214;
+  --case-hairline: rgba(255, 255, 255, 0.15);
+  --case-display: 'Big Shoulders Display', Impact, sans-serif;
+  --case-body: 'IBM Plex Sans', sans-serif;
+  --case-mono: 'IBM Plex Mono', monospace;
+  --case-radius: 16px;
+}

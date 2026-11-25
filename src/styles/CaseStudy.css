@@ -1,0 +1,343 @@
+/* ============================================================
+   LAYER B: ISOLATED PER-PROJECT SCOPED CASE STUDY WORLD
+   Every property resolves cleanly from [data-project-theme="<slug>"]
+   ============================================================ */
+
+.scoped-case-world {
+  min-height: 100vh;
+  background-color: var(--case-ground);
+  color: var(--case-ink);
+  font-family: var(--case-body);
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+/* Minimal Persistent Host Shell Orientation Bar */
+.case-host-bar {
+  position: sticky;
+  top: 84px;
+  z-index: 95;
+  margin-bottom: 36px;
+}
+
+.case-host-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--case-card);
+  border: 1px solid var(--case-hairline);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+
+.case-host-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--case-hairline);
+  background: transparent;
+  color: var(--case-ink);
+  font-family: var(--case-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.case-host-btn:hover {
+  background: var(--case-ink);
+  color: var(--case-ground);
+}
+
+.case-host-btn--accent {
+  background: var(--case-accent);
+  color: var(--case-accent-ink);
+  border-color: var(--case-accent);
+}
+
+.case-host-btn--accent:hover {
+  opacity: 0.9;
+  background: var(--case-accent);
+  color: var(--case-accent-ink);
+}
+
+/* Layer 1: 30-Second Recruiter Executive Header */
+.case-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: end;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--case-hairline);
+}
+
+.case-title {
+  margin: 12px 0 10px;
+  font-family: var(--case-display);
+  font-size: clamp(54px, 8.2vw, 118px);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--case-ink);
+}
+
+.case-subtitle {
+  margin: 0;
+  font-family: var(--case-editorial-serif, var(--case-body));
+  font-size: clamp(20px, 2.2vw, 28px);
+  color: var(--case-muted);
+}
+
+.case-summary-card {
+  padding: 22px 24px;
+  border-radius: var(--case-radius);
+  background: var(--case-card);
+  border: 1px solid var(--case-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.case-summary-card__text {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.58;
+  color: var(--case-ink);
+}
+
+.case-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--case-hairline);
+  margin-bottom: 36px;
+}
+
+.case-meta-cell small {
+  display: block;
+  font-family: var(--case-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--case-muted);
+  margin-bottom: 4px;
+}
+
+.case-meta-cell strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.case-jump-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.case-jump-link {
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--case-hairline);
+  font-family: var(--case-mono);
+  font-size: 11px;
+  color: var(--case-ink);
+}
+
+.case-jump-link:hover {
+  background: var(--case-ink);
+  color: var(--case-ground);
+}
+
+/* Full-Bleed Annotated Hero Plate & Gallery */
+.case-section {
+  padding: clamp(36px, 5vw, 60px) 0;
+  border-bottom: 1px solid var(--case-hairline);
+}
+
+.case-section__label {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--case-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--case-muted);
+}
+
+.case-plate-figure {
+  margin: 0;
+  border-radius: var(--case-radius);
+  overflow: hidden;
+  border: 1px solid var(--case-hairline);
+  background: var(--case-surface);
+}
+
+.case-plate-figure img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.case-plate-figure figcaption {
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: var(--case-muted);
+  border-top: 1px solid var(--case-hairline);
+}
+
+.case-plates-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.case-problem-lead {
+  margin: 0;
+  max-width: 28ch;
+  font-family: var(--case-display);
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.06;
+}
+
+/* Forensic Firewall & Trade-off Cards */
+.case-three-col {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.case-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.case-card {
+  padding: 22px;
+  border-radius: var(--case-radius);
+  background: var(--case-card);
+  border: 1px solid var(--case-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.case-card h3 {
+  margin: 0;
+  font-family: var(--case-display);
+  font-size: 26px;
+  line-height: 1.05;
+}
+
+.case-card p,
+.case-card li {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.54;
+  color: var(--case-muted);
+}
+
+.case-card ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tradeoff-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.tradeoff-kv strong {
+  color: var(--case-ink);
+}
+
+/* Click-to-Copy Scoped Token Swatches */
+.token-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.token-swatch-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--case-radius);
+  border: 1px solid var(--case-hairline);
+  background: var(--case-card);
+  text-align: left;
+  color: var(--case-ink);
+  transition: transform var(--dur-fast) var(--ease-tactile);
+}
+
+.token-swatch-btn:hover {
+  transform: translateY(-2px);
+}
+
+.token-swatch-chip {
+  width: 100%;
+  height: 54px;
+  border-radius: 6px;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.case-next-footer {
+  margin-top: 48px;
+  padding: 28px;
+  border-radius: var(--case-radius);
+  background: var(--case-surface);
+  border: 1px solid var(--case-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.case-next-footer__title {
+  margin: 4px 0 0;
+  font-family: var(--case-display);
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 0.96;
+}
+
+@media (max-width: 960px) {
+  .case-hero-grid,
+  .case-three-col,
+  .case-two-col,
+  .case-plates-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .case-meta-strip,
+  .token-swatches-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .case-meta-strip,
+  .token-swatches-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-host-bar__inner {
+    border-radius: 18px;
+  }
+}
