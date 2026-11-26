@@ -1,6 +1,6 @@
 /* ============================================================
    IGLOO.INC 1:1 SPATIAL WEBGL OBSERVATORY & INFINITE LOOP HUD
-   Overcast Silver-Slate Mist (#A4ABB7), White Radiance, Pixel Scramble
+   Arctic Silver-Slate Mist (#AEB5C1), Overexposed Halo Radiance
    ============================================================ */
 
 .igloo-viewport-shell {
@@ -9,7 +9,7 @@
   width: 100vw;
   height: 100dvh;
   overflow: hidden;
-  background-color: #a4abb7;
+  background-color: #aeb5c1;
   user-select: none;
   touch-action: none;
 }
@@ -32,7 +32,7 @@
 .igloo-dot-matrix {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.58) 1px, transparent 1px);
   background-size: 46px 46px;
   transition: opacity 420ms ease;
 }
@@ -51,7 +51,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.88);
   font-family: var(--font-mono);
   font-size: 9.5px;
   font-variant-numeric: tabular-nums;
@@ -79,6 +79,7 @@
   align-items: center;
   justify-content: space-between;
   padding-inline: 6vw;
+  transition: opacity 240ms ease;
 }
 
 .igloo-dof-watermark {
@@ -86,27 +87,27 @@
   flex-direction: column;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: clamp(18px, 2.4vw, 32px);
+  font-size: clamp(18px, 2.3vw, 30px);
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.42);
-  filter: blur(2.6px);
+  color: rgba(255, 255, 255, 0.45);
+  filter: blur(2.8px);
 }
 
 .igloo-dof-watermark--right {
   text-align: right;
-  margin-top: 140px;
+  margin-top: 130px;
 }
 
-/* TOP-LEFT: Outlined Wordmark + Scramble Bars */
+/* TOP-LEFT: Stencil Wordmark + Glitch Telemetry Bars */
 .igloo-top-left {
   position: absolute;
-  top: 26px;
+  top: 24px;
   left: 28px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 7px;
   pointer-events: auto;
 }
 
@@ -117,45 +118,46 @@
 }
 
 .igloo-wordmark-svg {
-  filter: drop-shadow(0 2px 10px rgba(32, 38, 48, 0.25));
+  filter: drop-shadow(0 2px 12px rgba(32, 38, 48, 0.22));
 }
 
 .igloo-scramble-stack {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 3px;
 }
 
 .igloo-bar {
   display: inline-block;
-  padding: 3px 9px;
+  padding: 2.5px 8px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
 .igloo-bar--dark {
-  background: rgba(34, 39, 48, 0.78);
+  background: rgba(34, 40, 50, 0.68);
+  backdrop-filter: blur(6px);
   color: #f4f8ff;
 }
 
 .igloo-bar--light {
-  background: rgba(255, 255, 255, 0.9);
-  color: #1c2129;
+  background: rgba(255, 255, 255, 0.86);
+  color: #1c222b;
 }
 
-/* TOP-RIGHT: Minimal Glitch-Tag Controls */
+/* TOP-RIGHT: Minimal Translucent Glitch-Tag Controls (matching f11 sleek tag!) */
 .igloo-top-right {
   position: absolute;
-  top: 28px;
+  top: 26px;
   right: 28px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   pointer-events: auto;
 }
 
@@ -163,17 +165,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 34px;
-  padding: 0 11px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(34, 39, 48, 0.68);
+  gap: 5px;
+  min-height: 29px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(38, 44, 55, 0.52);
   backdrop-filter: blur(8px);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: background-color 180ms ease, color 180ms ease;
 }
@@ -197,7 +199,7 @@
 /* Index Quick-Jump Drawer */
 .igloo-index-drawer {
   position: absolute;
-  top: 72px;
+  top: 64px;
   right: 28px;
   width: min(360px, calc(100vw - 32px));
   padding: 14px;
@@ -277,12 +279,12 @@
   color: #181c24;
 }
 
-/* BEAT 3: Pedestal Left/Right Reticle Arrows + Center Title + Glowing Plaque (f09 & f10) */
+/* BEAT 3: Exact f10 Geometric Line-Hook Arrows + Fluid Motion Caption + Double-Bracket Plaque */
 .igloo-chamber-arrows {
   position: absolute;
-  left: 8vw;
-  right: 8vw;
-  top: 50%;
+  left: 14vw;
+  right: 14vw;
+  top: 47%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -292,70 +294,72 @@
 
 .igloo-reticle-arrow {
   pointer-events: auto;
-  width: 64px;
-  height: 44px;
+  width: 72px;
+  height: 36px;
   border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.82);
+  padding: 0;
   background: transparent;
   color: #ffffff;
-  font-size: 24px;
+  opacity: 0.86;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 200ms var(--ease-tactile), border-color 200ms ease;
+  transition: transform 220ms var(--ease-tactile), opacity 180ms ease;
 }
 
 .igloo-reticle-arrow:hover {
   transform: scale(1.12);
-  border-color: #ffffff;
+  opacity: 1;
 }
 
 .igloo-chamber-caption {
   position: absolute;
   left: 50%;
-  top: -310px;
-  transform: translateX(-50%);
+  top: -292px;
+  transform: translate3d(-50%, 0, 0);
   text-align: center;
   width: min(560px, 84vw);
-  text-shadow: 0 2px 18px rgba(34, 40, 52, 0.45);
+  text-shadow: 0 2px 18px rgba(34, 40, 52, 0.36);
+  will-change: transform, opacity, filter;
 }
 
 .igloo-chamber-caption__code {
   display: inline-block;
   padding: 2px 8px;
-  background: rgba(34, 39, 48, 0.68);
+  background: rgba(34, 40, 50, 0.62);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: 9.5px;
+  letter-spacing: 0.11em;
 }
 
 .igloo-chamber-caption__title {
-  margin: 8px 0 4px;
+  margin: 7px 0 4px;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(34px, 4.4vw, 56px);
-  line-height: 0.95;
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 0.96;
   color: #ffffff;
 }
 
 .igloo-chamber-caption__sub {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.92);
 }
 
-/* Bottom-Center Glowing Corner-Bracketed Plaque (exact f09 & f10!) */
+/* Bottom-Center Overexposed Double-Bracketed Plaque (exact f09 & f10!) */
 .igloo-pedestal-plaque-bar {
   position: absolute;
   left: 50%;
-  bottom: 34px;
-  transform: translateX(-50%);
+  bottom: 28px;
+  transform: translate3d(-50%, 0, 0);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   pointer-events: auto;
+  will-change: transform, opacity;
 }
 
 .igloo-glow-plaque {
@@ -365,17 +369,18 @@
   justify-content: center;
   gap: 8px;
   min-height: 44px;
-  padding: 0 22px;
-  border: 1px solid #ffffff;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 0 24px;
+  border: 1.5px solid #ffffff;
+  background: rgba(255, 255, 255, 0.96);
   color: #1a1f28;
   box-shadow:
-    0 0 24px rgba(230, 246, 255, 0.85),
-    inset 0 0 12px rgba(255, 255, 255, 0.95);
+    0 0 32px rgba(242, 250, 255, 0.95),
+    0 0 12px rgba(255, 255, 255, 0.95),
+    inset 0 0 14px rgba(255, 255, 255, 1);
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   white-space: nowrap;
   transition: transform 200ms var(--ease-tactile), box-shadow 200ms ease;
@@ -383,14 +388,14 @@
 
 .igloo-glow-plaque:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 34px rgba(255, 255, 255, 1);
+  box-shadow: 0 0 42px rgba(255, 255, 255, 1);
 }
 
 .plaque-corner {
   position: absolute;
-  width: 7px;
-  height: 7px;
-  border-color: #1a1f28;
+  width: 9px;
+  height: 9px;
+  border-color: #4a5568;
   border-style: solid;
   border-width: 0;
 }
@@ -426,17 +431,17 @@
 .igloo-mini-plaque {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 36px;
-  padding: 0 12px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  background: rgba(34, 39, 48, 0.62);
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.24);
   backdrop-filter: blur(8px);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   white-space: nowrap;
 }
 
@@ -466,8 +471,8 @@
   background: rgba(26, 31, 40, 0.74);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  letter-spacing: 0.09em;
 }
 
 .igloo-vortex-links {
@@ -481,12 +486,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 36px;
+  min-height: 35px;
   padding: 0 14px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: #1a1f28;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   transition: transform 180ms ease;
 }
@@ -510,26 +515,26 @@
 .igloo-bottom-left {
   position: absolute;
   left: 28px;
-  bottom: 26px;
+  bottom: 24px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .igloo-pixel-glyph {
   padding: 3px 5px;
-  background: rgba(26, 31, 40, 0.78);
+  background: rgba(26, 31, 40, 0.76);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9.5px;
 }
 
 .igloo-bottom-tag {
   padding: 3px 10px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   color: #1a1f28;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
@@ -538,7 +543,7 @@
 .igloo-bottom-right {
   position: absolute;
   right: 28px;
-  bottom: 26px;
+  bottom: 24px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -546,14 +551,14 @@
 }
 
 .igloo-checkpoint-pip {
-  min-width: 30px;
-  min-height: 28px;
-  padding: 0 6px;
+  min-width: 28px;
+  min-height: 26px;
+  padding: 0 5px;
   border: 1px solid rgba(255, 255, 255, 0.42);
-  background: rgba(26, 31, 40, 0.62);
+  background: rgba(34, 40, 50, 0.54);
   color: #ffffff;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -676,7 +681,7 @@
   .igloo-top-left {
     top: 14px;
     left: 14px;
-    gap: 10px;
+    gap: 8px;
   }
 
   .igloo-wordmark-svg {
@@ -689,7 +694,7 @@
   }
 
   .igloo-bar {
-    font-size: 9px;
+    font-size: 8.5px;
     padding: 2px 6px;
     max-width: calc(100vw - 28px);
     overflow: hidden;
@@ -704,9 +709,9 @@
   }
 
   .igloo-hud-chip {
-    min-height: 28px;
+    min-height: 27px;
     padding: 0 7px;
-    font-size: 9px;
+    font-size: 8.5px;
   }
 
   .igloo-chamber-arrows {
@@ -715,21 +720,21 @@
   }
 
   .igloo-reticle-arrow {
-    width: 42px;
+    width: 44px;
   }
 
   .igloo-chamber-caption {
-    top: -245px;
+    top: -238px;
   }
 
   .igloo-pedestal-plaque-bar {
-    bottom: 62px;
+    bottom: 60px;
     gap: 6px;
   }
 
   .igloo-glow-plaque {
     padding: 0 14px;
-    font-size: 10px;
+    font-size: 9.5px;
     min-height: 38px;
   }
 

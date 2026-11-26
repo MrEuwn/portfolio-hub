@@ -14,7 +14,7 @@ function useScrambleText(targetText, durationMs = 420) {
     }
 
     let frame = 0;
-    const totalFrames = Math.max(8, Math.round(durationMs / 28));
+    const totalFrames = Math.max(8, Math.round(durationMs / 26));
     const timer = window.setInterval(() => {
       frame += 1;
       const revealCount = Math.floor((frame / totalFrames) * targetText.length);
@@ -33,7 +33,7 @@ function useScrambleText(targetText, durationMs = 420) {
         window.clearInterval(timer);
         setDisplay(targetText);
       }
-    }, 28);
+    }, 26);
 
     return () => window.clearInterval(timer);
   }, [targetText, durationMs]);
@@ -47,6 +47,7 @@ export default function IglooHudOverlay({
   loadProgress,
   loopPct,
   stage,
+  chamberMotion = { presence: 1, morph: 0, velocity: 0 },
   hoverTriangle,
   cadPoints,
   soundOn,
@@ -68,44 +69,60 @@ export default function IglooHudOverlay({
       ? `CAD SURVEY // ${String(Math.round(loadProgress * 100)).padStart(3, '0')}%`
       : stage.mode === 'hero'
         ? lang === 'id'
-          ? 'OBSERVATORIUM KUARSA // 05 DUNIA AWWWARDS'
-          : 'SUB-SURFACE OBSERVATORY // 05 AWWWARDS WORLDS'
+          ? 'OBSERVATORIUM ARKTIK // 05 DUNIA AWWWARDS'
+          : 'ARCTIC OBSERVATORY // 05 AWWWARDS WORLDS'
         : stage.mode === 'plunge'
-          ? 'DESCENDING // STARGATE APERTURE RING'
+          ? 'DESCENDING // STARGATE PLASMA APERTURE'
           : stage.mode === 'chamber' && activeProject
             ? `CHAMBER ${activeProject.index} // ${activeProject.categoryLabel.toUpperCase()}`
-            : 'CORE VORTEX // CONTINUOUS INFINITE LOOP';
+            : 'CYCLONE VORTEX // CONTINUOUS INFINITE LOOP';
 
   const topLightLine =
     stage.mode === 'loading'
-      ? 'INITIALIZING GEODESIC MASONRY + 15K POINT CLOUD'
+      ? 'CALIBRATING VOUSSOIR MASONRY + 42K VOXELS'
       : stage.mode === 'hero'
         ? lang === 'id'
           ? 'GULIR TANPA BATAS · SENTUH BLOK BATU'
-          : 'SCROLL INFINITE LOOP · HOVER MASONRY BLOCKS'
+          : 'SCROLL INFINITE LOOP · HOVER STONE BLOCKS'
         : stage.mode === 'chamber' && activeProject
           ? `${activeProject.title.toUpperCase()} · ${activeProject.shortName}`
           : stage.mode === 'vortex'
-            ? 'SWEEP CURSOR TO EXCITE VORTEX · SCROLL TO REASSEMBLE'
-            : 'CALIBRATING VOLUMETRIC POINT CLOUD';
+            ? 'KEEP SCROLLING TO DIVE THROUGH STORM INTO SUMMIT'
+            : 'ENTERING SUB-SURFACE HALO PEDESTAL';
 
-  const scrambledDark = useScrambleText(topDarkLine, 380);
-  const scrambledLight = useScrambleText(topLightLine, 460);
+  const scrambledDark = useScrambleText(topDarkLine, 360);
+  const scrambledLight = useScrambleText(topLightLine, 440);
+  const scrambledChamberTitle = useScrambleText(
+    activeProject ? activeProject.title : '',
+    320
+  );
 
   const bottomTag = isLoaded
     ? `${String(loopPct).padStart(3, '0')}% // LOOP ∞`
     : `LOAD ${String(Math.round(loadProgress * 100)).padStart(3, '0')}%`;
+
+  const presence = Math.max(0.18, Math.min(1, chamberMotion.presence));
+  const captionShiftY = ((1 - presence) * -18).toFixed(1);
+  const captionBlur = ((1 - presence) * 6.5).toFixed(2);
+  const plaqueShiftY = ((1 - presence) * 14).toFixed(1);
 
   return (
     <div className="igloo-hud-layer">
       {/* Subtle 1px Dot-Matrix Mist Grid (exact f06 & f10 atmospheric grid!) */}
       <div
         className="igloo-dot-matrix"
-        style={{ opacity: stage.mode === 'plunge' || stage.mode === 'chamber' ? 0.52 : 0.18 }}
+        style={{
+          opacity:
+            stage.mode === 'plunge'
+              ? 0.56
+              : stage.mode === 'chamber'
+                ? 0.36
+                : 0.1,
+        }}
         aria-hidden="true"
       />
 
-      {/* Beat 0: Isometric 3D CAD Preloader Vertex Crosses & Numbers (exact f01 & f02!) */}
+      {/* Beat 0: Isometric 3D CAD Preloader Vertex Crosses & Numbers (exact f01 & f03!) */}
       {!isLoaded && cadPoints.length > 0 && (
         <div className="igloo-cad-overlay" aria-hidden="true">
           {cadPoints.map((pt, idx) => (
@@ -123,24 +140,24 @@ export default function IglooHudOverlay({
         </div>
       )}
 
-      {/* Beat 1: 1px White Hover Tracking Triangle Over Observatory Masonry Blocks (exact f04!) */}
+      {/* Beat 1: 1px White Hover Tracking Triangle Over Observatory Voussoir Blocks (exact f04!) */}
       {isLoaded && hoverTriangle && hoverTriangle.length === 3 && (
         <svg className="igloo-hover-tri-svg" aria-hidden="true">
           <polygon
             points={hoverTriangle.map((t) => `${t.x.toFixed(1)},${t.y.toFixed(1)}`).join(' ')}
-            fill="rgba(255, 255, 255, 0.06)"
-            stroke="rgba(255, 255, 255, 0.88)"
+            fill="rgba(255, 255, 255, 0.05)"
+            stroke="rgba(255, 255, 255, 0.92)"
             strokeWidth="1"
           />
           {hoverTriangle.map((t) => (
             <g key={t.code} transform={`translate(${t.x.toFixed(1)}, ${t.y.toFixed(1)})`}>
-              <line x1="-4" y1="0" x2="4" y2="0" stroke="#ffffff" strokeWidth="1" />
-              <line x1="0" y1="-4" x2="0" y2="4" stroke="#ffffff" strokeWidth="1" />
+              <line x1="-4.5" y1="0" x2="4.5" y2="0" stroke="#ffffff" strokeWidth="1" />
+              <line x1="0" y1="-4.5" x2="0" y2="4.5" stroke="#ffffff" strokeWidth="1" />
               <text
                 x="6"
                 y="-6"
                 fill="#ffffff"
-                fontSize="10"
+                fontSize="10.5"
                 fontFamily="IBM Plex Mono, monospace"
                 fontWeight="600"
               >
@@ -153,19 +170,23 @@ export default function IglooHudOverlay({
 
       {/* Depth-of-Field Blurred Background Telemetry Watermarks (exact f06 & f10!) */}
       {isLoaded && (stage.mode === 'plunge' || stage.mode === 'chamber') && (
-        <div className="igloo-dof-watermarks" aria-hidden="true">
+        <div
+          className="igloo-dof-watermarks"
+          style={{ opacity: stage.mode === 'plunge' ? 0.85 : 0.42 + presence * 0.45 }}
+          aria-hidden="true"
+        >
           <div className="igloo-dof-watermark igloo-dof-watermark--left">
-            <span>PRE-LOAD // {activeProject ? activeProject.index : '01'}</span>
+            <span>PRE-LOAD OFF/{activeProject ? activeProject.index : '01'}</span>
             <span>00 001 26</span>
           </div>
           <div className="igloo-dof-watermark igloo-dof-watermark--right">
             <span>{activeProject ? activeProject.shortName : 'VAULT'} // SPECIMEN</span>
-            <span>{activeProject ? activeProject.tokens.ratio : '15000 PTS'}</span>
+            <span>42,000 VOXELS · {activeProject ? activeProject.tokens.ratio : 'AAA'}</span>
           </div>
         </div>
       )}
 
-      {/* TOP-LEFT: Double-Stroke Outlined Geometric Wordmark + Pixel-Block Scramble Strips (exact f05 & f11!) */}
+      {/* TOP-LEFT: Double-Line Geometric Stencil Logotype + Glitch Telemetry Bars (exact f05, f08, f10, f11!) */}
       <header className="igloo-top-left">
         <button
           type="button"
@@ -174,35 +195,44 @@ export default function IglooHudOverlay({
           aria-label="Return camera to surface observatory"
         >
           <svg
-            width="176"
-            height="34"
-            viewBox="0 0 220 42"
+            width="164"
+            height="32"
+            viewBox="0 0 236 44"
             className="igloo-wordmark-svg"
             aria-hidden="true"
           >
+            {/* Outer sci-fi corner micro-ticks matching IGLOO stencil framing */}
+            <path
+              d="M2 10V3H10 M226 3H234V10 M2 34V41H10 M226 41H234V34"
+              fill="none"
+              stroke="rgba(255,255,255,0.88)"
+              strokeWidth="1.6"
+            />
             <text
-              x="2"
+              x="12"
               y="32"
               fill="none"
               stroke="#FFFFFF"
-              strokeWidth="2.4"
+              strokeWidth="2.8"
+              strokeLinejoin="round"
               fontFamily="Archivo, Impact, sans-serif"
               fontWeight="800"
-              fontSize="33"
-              letterSpacing="3"
+              fontSize="29"
+              letterSpacing="4.5"
             >
               PRAFASTA
             </text>
             <text
-              x="2"
+              x="12"
               y="32"
               fill="none"
-              stroke="rgba(32, 38, 48, 0.55)"
-              strokeWidth="0.9"
+              stroke="rgba(45, 52, 64, 0.72)"
+              strokeWidth="1.1"
+              strokeLinejoin="round"
               fontFamily="Archivo, Impact, sans-serif"
               fontWeight="800"
-              fontSize="33"
-              letterSpacing="3"
+              fontSize="29"
+              letterSpacing="4.5"
             >
               PRAFASTA
             </text>
@@ -215,7 +245,7 @@ export default function IglooHudOverlay({
         </div>
       </header>
 
-      {/* TOP-RIGHT: Minimal Dark Glitch-Tag Controls (SOUND, INDEX [05], LANG, BRIEF) */}
+      {/* TOP-RIGHT: Clean Minimal Atmospheric Glitch-Tags (matching f11 minimal upper-right tag!) */}
       <nav className="igloo-top-right" aria-label="Observatory controls">
         <button
           type="button"
@@ -225,8 +255,8 @@ export default function IglooHudOverlay({
           aria-label={soundOn ? 'Mute atmospheric audio' : 'Enable atmospheric audio'}
           data-testid="hud-sound-btn"
         >
-          {soundOn ? <Volume2 size={13} aria-hidden="true" /> : <VolumeX size={13} aria-hidden="true" />}
-          <span className="igloo-sfx-label">{soundOn ? 'SFX ON' : 'SFX OFF'}</span>
+          {soundOn ? <Volume2 size={12} aria-hidden="true" /> : <VolumeX size={12} aria-hidden="true" />}
+          <span className="igloo-sfx-label">{soundOn ? 'SFX ON' : 'SFX'}</span>
         </button>
 
         <button
@@ -266,7 +296,7 @@ export default function IglooHudOverlay({
             <span>05 LIVE</span>
           </div>
           {PROJECTS.map((proj, idx) => {
-            const chamberProg = 0.32 + idx * 0.104;
+            const chamberProg = 0.305 + idx * 0.1;
             return (
               <div key={proj.slug} className="igloo-index-row">
                 <button
@@ -314,7 +344,7 @@ export default function IglooHudOverlay({
         </aside>
       )}
 
-      {/* BEAT 3: PEDESTAL LEFT/RIGHT RETICLE ARROWS + GLOWING CORNER-BRACKETED PLAQUE (exact f09 & f10!) */}
+      {/* BEAT 3: EXACT f10 GEOMETRIC LINE-HOOK RETICLE ARROWS + FLUID MOTION CAPTION + DOUBLE-BRACKET PLAQUE */}
       {isLoaded && stage.mode === 'chamber' && activeProject && (
         <>
           <div className="igloo-chamber-arrows">
@@ -325,14 +355,28 @@ export default function IglooHudOverlay({
               aria-label="Previous relic chamber"
               data-testid="chamber-prev-btn"
             >
-              <span aria-hidden="true">↼</span>
+              <svg width="62" height="18" viewBox="0 0 62 18" aria-hidden="true">
+                <path
+                  d="M13 2 L2 13 L60 13"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.25"
+                />
+              </svg>
             </button>
 
-            <div className="igloo-chamber-caption">
+            <div
+              className="igloo-chamber-caption"
+              style={{
+                opacity: presence,
+                transform: `translate3d(-50%, ${captionShiftY}px, 0)`,
+                filter: `blur(${captionBlur}px)`,
+              }}
+            >
               <span className="igloo-chamber-caption__code">
                 RELIC {activeProject.index} / 05 · {activeProject.status.toUpperCase()}
               </span>
-              <h2 className="igloo-chamber-caption__title">{activeProject.title}</h2>
+              <h2 className="igloo-chamber-caption__title">{scrambledChamberTitle}</h2>
               <p className="igloo-chamber-caption__sub">
                 {lang === 'id' ? activeProject.subtitleId : activeProject.subtitleEn}
               </p>
@@ -345,18 +389,31 @@ export default function IglooHudOverlay({
               aria-label="Next relic chamber"
               data-testid="chamber-next-btn"
             >
-              <span aria-hidden="true">⇀</span>
+              <svg width="62" height="18" viewBox="0 0 62 18" aria-hidden="true">
+                <path
+                  d="M49 2 L60 13 L2 13"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.25"
+                />
+              </svg>
             </button>
           </div>
 
-          <div className="igloo-pedestal-plaque-bar">
+          <div
+            className="igloo-pedestal-plaque-bar"
+            style={{
+              opacity: 0.35 + presence * 0.65,
+              transform: `translate3d(-50%, ${plaqueShiftY}px, 0)`,
+            }}
+          >
             <button
               type="button"
               className="igloo-mini-plaque"
               onClick={() => onOpenFullCase(activeProject.slug)}
               data-testid="chamber-case-btn"
             >
-              FULL CASE
+              CASE
             </button>
 
             <button
@@ -383,17 +440,17 @@ export default function IglooHudOverlay({
               aria-label={`Launch live site ${activeProject.title}`}
             >
               <span>LIVE</span>
-              <ExternalLink size={12} aria-hidden="true" />
+              <ExternalLink size={11} aria-hidden="true" />
             </a>
           </div>
         </>
       )}
 
-      {/* BEAT 4: INTERACTIVE VOLUMETRIC PARTICLE VORTEX FOOTER HUD */}
+      {/* BEAT 4: TOWERING CYCLONE PARTICLE VORTEX FOOTER HUD */}
       {isLoaded && stage.mode === 'vortex' && (
         <div className="igloo-vortex-hud">
           <p className="igloo-vortex-hud__kicker">
-            06 // VOLUMETRIC REACTOR VORTEX · KEEP SCROLLING TO LOOP INTO SURFACE DOME
+            06 // CYCLONE REACTOR VORTEX · SCROLL DOWN TO ERUPT ABOVE ARCTIC SUMMIT
           </p>
           <div className="igloo-vortex-links">
             {PROJECTS.map((proj) => (
@@ -423,7 +480,7 @@ export default function IglooHudOverlay({
 
       {/* BOTTOM-LEFT: White Glitch Block Scroll/Loop Indicator (exact f05..f11 bottom-left bar!) */}
       <div className="igloo-bottom-left" aria-hidden="true">
-        <span className="igloo-pixel-glyph">▒░</span>
+        <span className="igloo-pixel-glyph">▓▒</span>
         <span className="igloo-bottom-tag">{bottomTag}</span>
       </div>
 
@@ -445,7 +502,7 @@ export default function IglooHudOverlay({
             className={`igloo-checkpoint-pip ${
               stage.mode === 'chamber' && stage.projectIdx === idx ? 'is-active' : ''
             }`}
-            onClick={() => onJumpToProgress(0.32 + idx * 0.104)}
+            onClick={() => onJumpToProgress(0.305 + idx * 0.1)}
             title={proj.title}
             aria-label={`Jump to ${proj.title}`}
           >
@@ -455,7 +512,7 @@ export default function IglooHudOverlay({
         <button
           type="button"
           className={`igloo-checkpoint-pip ${stage.mode === 'vortex' ? 'is-active' : ''}`}
-          onClick={() => onJumpToProgress(0.85)}
+          onClick={() => onJumpToProgress(0.835)}
           title="Particle Vortex"
           aria-label="Jump to Particle Vortex"
         >

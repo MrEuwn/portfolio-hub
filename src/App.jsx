@@ -24,6 +24,7 @@ export default function App() {
   const [loadProgress, setLoadProgress] = useState(0);
   const [loopPct, setLoopPct] = useState(0);
   const [stage, setStage] = useState({ mode: 'loading', projectIdx: -1 });
+  const [chamberMotion, setChamberMotion] = useState({ presence: 1, morph: 0, velocity: 0 });
   const [hoverTriangle, setHoverTriangle] = useState(null);
   const [cadPoints, setCadPoints] = useState([]);
   const [soundOn, setSoundOn] = useState(false);
@@ -32,12 +33,15 @@ export default function App() {
   const [activeCaseSlug, setActiveCaseSlug] = useState(() => parseCaseFromHash());
   const [briefOpen, setBriefOpen] = useState(false);
 
-  // Unbounded continuous target & smoothed progress wrapped mod 1 for true infinite loop!
+  // Unbounded continuous target, velocity, & smoothed progress wrapped mod 1 for silky infinite loop!
   const rawTargetRef = useRef(0);
   const rawCurrentRef = useRef(0);
+  const velocityRef = useRef(0);
+  const lastInputTimeRef = useRef(0);
+  const qaPinnedRef = useRef(false);
   const wrappedProgressRef = useRef(0);
 
-  // Beat 0: Isometric 3D Wireframe CAD Preloader (0 -> 100% in ~1.45s, instant under reduced motion)
+  // Beat 0: Isometric 3D Wireframe CAD Preloader (0 -> 100% in ~1.55s, instant under reduced motion)
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
@@ -45,13 +49,13 @@ export default function App() {
       return undefined;
     }
 
-    const duration = 1450;
+    const duration = 1550;
     const start = performance.now();
     let rafId = 0;
 
     const tick = (now) => {
       const t = Math.max(0, Math.min(1, (now - start) / duration));
-      const eased = 1 - Math.pow(1 - t, 2.4);
+      const eased = 1 - Math.pow(1 - t, 2.5);
       setLoadProgress(eased);
       if (t < 1) {
         rafId = window.requestAnimationFrame(tick);
@@ -62,14 +66,13 @@ export default function App() {
     return () => window.cancelAnimationFrame(rafId);
   }, []);
 
-  // Sync #case/<slug> hash navigation
   useEffect(() => {
     const onHash = () => setActiveCaseSlug(parseCaseFromHash());
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  // Bidirectional Virtual Wheel + Touch Drag + Keyboard Infinite Scroll Engine
+  // Silky Inertial Momentum + Gentle Post-Scroll Chamber Settle Engine
   useEffect(() => {
     if (activeCaseSlug) return undefined;
 
@@ -78,23 +81,36 @@ export default function App() {
     const onWheel = (e) => {
       if (isOverlayOpen()) return;
       e.preventDefault();
-      const delta = Math.max(-160, Math.min(160, e.deltaY));
-      rawTargetRef.current += delta * 0.00026;
+      qaPinnedRef.current = false;
+      lastInputTimeRef.current = performance.now();
+      const normDelta = e.deltaMode === 1 ? e.deltaY * 28 : e.deltaY;
+      const clamped = Math.max(-180, Math.min(180, normDelta));
+      // Direct target advance + inertial glide impulse so wheel & trackpad feel liquid!
+      rawTargetRef.current += clamped * 0.00031;
+      velocityRef.current = Math.max(-0.38, Math.min(0.38, velocityRef.current + clamped * 0.00042));
     };
 
     let touchY = null;
+    let lastTouchStep = 0;
     const onTouchStart = (e) => {
       if (isOverlayOpen() || e.touches.length !== 1) return;
+      qaPinnedRef.current = false;
       touchY = e.touches[0].clientY;
+      lastTouchStep = 0;
     };
     const onTouchMove = (e) => {
       if (isOverlayOpen() || touchY === null || e.touches.length !== 1) return;
+      lastInputTimeRef.current = performance.now();
       const curY = e.touches[0].clientY;
       const dy = touchY - curY;
       touchY = curY;
-      rawTargetRef.current += dy * 0.0011;
+      lastTouchStep = dy;
+      rawTargetRef.current += dy * 0.0012;
     };
     const onTouchEnd = () => {
+      if (Math.abs(lastTouchStep) > 2) {
+        velocityRef.current += lastTouchStep * 0.0032;
+      }
       touchY = null;
     };
 
@@ -102,10 +118,14 @@ export default function App() {
       if (isOverlayOpen()) return;
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
-        rawTargetRef.current += 0.055;
+        qaPinnedRef.current = false;
+        lastInputTimeRef.current = performance.now();
+        rawTargetRef.current += 0.065;
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
         e.preventDefault();
-        rawTargetRef.current -= 0.055;
+        qaPinnedRef.current = false;
+        lastInputTimeRef.current = performance.now();
+        rawTargetRef.current -= 0.065;
       }
     };
 
@@ -115,12 +135,13 @@ export default function App() {
     window.addEventListener('touchend', onTouchEnd, { passive: true });
     window.addEventListener('keydown', onKeyDown);
 
-    // Expose deterministic helper for automated QA & smooth checkpoint jumps
     window.__setObservatoryProgress = (targetWrapped) => {
+      qaPinnedRef.current = true;
+      velocityRef.current = 0;
       rawTargetRef.current = targetWrapped;
       rawCurrentRef.current = targetWrapped;
       wrappedProgressRef.current = mod1(targetWrapped);
-      setLoopPct(Math.round(wrappedProgressRef.current * 100));
+      setLoopPct(Math.round(wrappedProgressRef.current * 100) % 100);
     };
 
     let rafId = 0;
@@ -132,7 +153,34 @@ export default function App() {
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
-      const alpha = 1 - Math.exp(-dt * 6.8);
+      if (!qaPinnedRef.current) {
+        // Carry residual flick momentum with natural fluid drag
+        if (Math.abs(velocityRef.current) > 0.0001) {
+          rawTargetRef.current += velocityRef.current * dt;
+          velocityRef.current *= Math.exp(-dt * 4.6);
+        }
+
+        // Gentle magnetic settle ONLY if user paused mid-morph between two sculptures (> 420ms idle)
+        const idleMs = now - lastInputTimeRef.current;
+        if (idleMs > 420 && Math.abs(velocityRef.current) < 0.015) {
+          const wTarget = mod1(rawTargetRef.current);
+          if (wTarget >= 0.28 && wTarget < 0.77) {
+            const mFloat = ((wTarget - 0.28) / 0.50) * 5.0;
+            const frac = mFloat - Math.floor(mFloat);
+            if (frac > 0.58 && frac < 0.96) {
+              const nearestChamber = frac > 0.77 ? Math.ceil(mFloat) : Math.floor(mFloat);
+              const clampedIdx = Math.min(4, Math.max(0, nearestChamber));
+              const idealWrapped = 0.28 + ((clampedIdx + 0.28) / 5.0) * 0.50;
+              let diff = idealWrapped - wTarget;
+              if (diff > 0.5) diff -= 1;
+              if (diff < -0.5) diff += 1;
+              rawTargetRef.current += diff * Math.min(1, dt * 3.2);
+            }
+          }
+        }
+      }
+
+      const alpha = 1 - Math.exp(-dt * 7.4);
       rawCurrentRef.current += (rawTargetRef.current - rawCurrentRef.current) * alpha;
       const wrapped = mod1(rawCurrentRef.current);
       wrappedProgressRef.current = wrapped;
@@ -156,8 +204,10 @@ export default function App() {
     };
   }, [activeCaseSlug, inspectSlug, briefOpen]);
 
-  // Smooth shortest-arc jump around the [0, 1) circle
   const jumpToProgress = useCallback((destWrapped) => {
+    qaPinnedRef.current = false;
+    velocityRef.current = 0;
+    lastInputTimeRef.current = performance.now();
     const curWrapped = mod1(rawTargetRef.current);
     let diff = mod1(destWrapped) - curWrapped;
     if (diff > 0.5) diff -= 1;
@@ -170,7 +220,7 @@ export default function App() {
     (dir) => {
       const curIdx = stage.projectIdx >= 0 ? stage.projectIdx : 0;
       const nextIdx = (curIdx + dir + PROJECTS.length) % PROJECTS.length;
-      jumpToProgress(0.32 + nextIdx * 0.104);
+      jumpToProgress(0.305 + nextIdx * 0.1);
     },
     [stage.projectIdx, jumpToProgress]
   );
@@ -234,6 +284,7 @@ export default function App() {
           setStage(nextStage);
           if (nextStage.mode === 'chamber') soundEngine.ping(480 + nextStage.projectIdx * 70);
         }}
+        onChamberMotionChange={setChamberMotion}
         onSelectProject={(slug) => setInspectSlug(slug)}
         modalOpen={Boolean(inspectProject || briefOpen)}
       />
@@ -244,6 +295,7 @@ export default function App() {
         loadProgress={loadProgress}
         loopPct={loopPct}
         stage={stage}
+        chamberMotion={chamberMotion}
         hoverTriangle={hoverTriangle}
         cadPoints={cadPoints}
         soundOn={soundOn}
